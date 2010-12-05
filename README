@@ -1,0 +1,6 @@
+A tool for examining Java projects and looking at how JUnit is being
+used; in particular trying to find known bad-habits e.g.
+* no assertions
+* assertTrue(true)
+* EasyMock/PowerMock in use but no calls to verify()
+* ...
