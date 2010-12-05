@@ -1,0 +1,9 @@
+.classpath
+.gradle
+.project
+.settings
+build
+test-narc.iml
+test-narc.ipr
+test-narc.iws
+
