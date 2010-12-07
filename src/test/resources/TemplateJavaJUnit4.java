@@ -7,4 +7,9 @@ public class TemplateJavaJUnit4 {
   public void doSomething() {
     assertEquals("Hello", "Dog");
   }
+  
+  // A comment
+  public void testShouldDoSomething() {
+    assertEquals(1,2);
+  }
 }

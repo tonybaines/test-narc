@@ -3,10 +3,11 @@ package tonybaines.testnarc
 class Fixture {
   static final File ROOT_DIR = new File('.')
   static final File TEST_PROJ_ROOT_DIR = new File(ROOT_DIR.absolutePath + '/build/test-project')
+  
   def buildDefaultProject() {
-    assert TEST_PROJ_ROOT_DIR.mkdirs()
+    TEST_PROJ_ROOT_DIR.mkdirs()
     ['/src/main/java', '/src/test/java'].each {
-      assert new File(TEST_PROJ_ROOT_DIR.absolutePath + it).mkdirs()
+      new File(TEST_PROJ_ROOT_DIR.absolutePath + it).mkdirs()
     }
     addMainClass()
     addTestClass()
