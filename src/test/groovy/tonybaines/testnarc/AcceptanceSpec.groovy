@@ -13,6 +13,6 @@ class AcceptanceSpec extends Specification {
     when: "The root of the project is analysed"
       def result = testnarc.check(TEST_PROJ_ROOT_DIR.absolutePath)
     then: "The number of lines of code for the production and test classes are returned"
-      result.contains("The ratio of test to production code is 2.4")
+      result.contains("The ratio of test to production code is 3")
   }
 }

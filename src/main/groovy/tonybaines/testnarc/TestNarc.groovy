@@ -5,25 +5,37 @@ class TestNarc {
     def projectRoot = new File(pathToProjectRoot)
     def productionLoC = findLoC(pathToProjectRoot + '/src/main/java')
     def testLoC = findLoC(pathToProjectRoot + '/src/test/java')
+    
     "The ratio of test to production code is ${testLoC/productionLoC}"
   }
   
-  def findLoC(path) {
+  def findLoC(String path) {
     def loc = 0
-    def files = findFiles(path)
+    def files = findJavaFiles(path) 
     files.each { File file ->
-      file.eachLine { 
-        if (it != '' && !it.trim().startsWith('//')) loc++ 
-      }
+      loc += findLoC(file)
     }
     loc
   }
   
-  private def findFiles(path) {
+  def findLoC(File file) {
+    def loc = 0
+    file.eachLine { line ->
+      if (isCode(line)) loc++
+    }
+    loc
+  }
+  
+  
+  private def isCode(line) { (line.trim() != '' && isNotAComment(line)) }
+  private def isNotAComment(line) { !(line.trim().startsWith('//') || line.trim().startsWith('*') || line.trim().startsWith('/*')) }
+  
+  private def findJavaFiles(path) { findFiles(path) {it.name.endsWith('.java')} }
+  private def findFiles(path, criteria) {
     def files = []
     File root = new File(path)
     root.eachFileRecurse { File it ->
-      if (it.isFile()) {
+      if (it.isFile() && criteria.call(it)) {
         files << it
       }
     }
