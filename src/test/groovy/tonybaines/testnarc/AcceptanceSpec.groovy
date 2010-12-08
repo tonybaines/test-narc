@@ -17,5 +17,7 @@ class AcceptanceSpec extends Specification {
       result.contains('The ratio of assertions to lines of test code is 0.2941')
       result.contains('The number of useless assertions e.g. assertTrue(true) is 2')
       result.contains('The number of not-null assertions is 1')
+      result.contains('The number of useful assertions is 2')
+      result.contains('The ratio of assertions to lines of test code with not-null and useless assertions removed is 0.1176')
   }
 }

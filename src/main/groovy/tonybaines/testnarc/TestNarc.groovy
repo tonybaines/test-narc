@@ -13,11 +13,14 @@ class TestNarc {
       it.contains('assertFalse(false)')
     }
     def notNullAssertions = testAssertions.grep { it.contains('assertNotNull') }
+    def usefulAssertions = testAssertions - badAssertions - notNullAssertions
     
     [sprintf("The ratio of test to production code is %.2f", (testLoC/productionLoC))
     ,sprintf("The ratio of assertions to lines of test code is %.4f", (testAssertions.size()/testLoC))
     ,sprintf("The number of useless assertions e.g. assertTrue(true) is %d", badAssertions.size())
-    ,sprintf("The number of not-null assertions is %d", notNullAssertions.size())]
+    ,sprintf("The number of not-null assertions is %d", notNullAssertions.size())
+    ,sprintf("The number of useful assertions is %d", usefulAssertions.size())
+    ,sprintf("The ratio of assertions to lines of test code with not-null and useless assertions removed is %.4f", (usefulAssertions.size()/testLoC))]
   }
   
   def countLoCIn(files) {
