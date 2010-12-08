@@ -17,6 +17,8 @@ public class TemplateJavaJUnit4 {
   
   // A comment
   public void testShouldDoSomething() {
-    assertEquals(1,2);
+    assertTrue(true);
+    assertFalse(false);
+    assertNotNull("");
   }
 }

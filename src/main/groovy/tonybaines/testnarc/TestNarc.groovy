@@ -2,30 +2,43 @@ package tonybaines.testnarc
 
 class TestNarc {
   def check(pathToProjectRoot) {
-    def projectRoot = new File(pathToProjectRoot)
-    def productionLoC = findLoC(pathToProjectRoot + '/src/main/java')
-    def testLoC = findLoC(pathToProjectRoot + '/src/test/java')
+    def files = findJavaFiles(pathToProjectRoot)
+    def testFiles = files.grep { it.name.contains 'Test'}
+    def productionFiles = files - testFiles
+    def productionLoC = countLoCIn(productionFiles)
+    def testLoC = countLoCIn(testFiles)
+    def testAssertions = findAssertionsIn(testFiles)
+    def badAssertions = testAssertions.grep {
+      it.contains('assertTrue(true)') ||
+      it.contains('assertFalse(false)')
+    }
+    def notNullAssertions = testAssertions.grep { it.contains('assertNotNull') }
     
-    "The ratio of test to production code is ${testLoC/productionLoC}"
+    [sprintf("The ratio of test to production code is %.2f", (testLoC/productionLoC))
+    ,sprintf("The ratio of assertions to lines of test code is %.4f", (testAssertions.size()/testLoC))
+    ,sprintf("The number of useless assertions e.g. assertTrue(true) is %d", badAssertions.size())
+    ,sprintf("The number of not-null assertions is %d", notNullAssertions.size())]
   }
   
-  def findLoC(String path) {
+  def countLoCIn(files) {
     def loc = 0
-    def files = findJavaFiles(path) 
     files.each { File file ->
-      loc += findLoC(file)
+      file.eachLine { line ->
+        if (isCode(line)) loc++
+      }
     }
     loc
   }
   
-  def findLoC(File file) {
-    def loc = 0
-    file.eachLine { line ->
-      if (isCode(line)) loc++
+  def findAssertionsIn(files) {
+    def assertions = []
+    files.each { File file ->
+      file.eachLine { line -> 
+         if (line.contains('assert')) assertions << line.trim()
+      }
     }
-    loc
+    assertions
   }
-  
   
   private def isCode(line) { (line.trim() != '' && isNotAComment(line)) }
   private def isNotAComment(line) { !(line.trim().startsWith('//') || line.trim().startsWith('*') || line.trim().startsWith('/*')) }
