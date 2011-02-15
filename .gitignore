@@ -1,9 +1,10 @@
+
+build
 .classpath
 .gradle
 .project
 .settings
-build
+src/main/groovy/tonybaines/testnarc/Version.groovy
 test-narc.iml
 test-narc.ipr
 test-narc.iws
-

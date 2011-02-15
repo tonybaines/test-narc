@@ -22,23 +22,23 @@ repositories {
 }
 
 dependencies {
-  groovy 'org.codehaus.groovy:groovy:1.7.5'
+  groovy 'org.codehaus.groovy:groovy:1.7.7'
   compile ('log4j:log4j:1.2.16'
           ,'commons-logging:commons-logging:1.1.1')
-  testCompile ('org.spockframework:spock-core:0.4-groovy-1.7')
+  testCompile ('org.spockframework:spock-core:0.5-groovy-1.7')
 }
 
 jar {
   from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
 }
 
-//task setVersion << {
-//    ant.echo(file: 'src/main/groovy/com/bt/buildstatscollector/Version.groovy',
-//            message: """
-//package com.bt.buildstatscollector
-///*AUTO-GENERATED FILE - DO NOT VERSION CONTROL*/
-//public class Version{
-//    public static final String VERSION = '${version}'
-//}""")
-//}
-//compileGroovy.dependsOn(setVersion)
+task setVersion << {
+    ant.echo(file: "src/main/groovy/${project.group.replaceAll(/\./, '/')}/Version.groovy",
+            message: """
+package ${project.group}
+/*AUTO-GENERATED FILE - DO NOT VERSION CONTROL*/
+public class Version{
+    public static final String VERSION = '${project.version}'
+}""")
+}
+compileGroovy.dependsOn(setVersion)
