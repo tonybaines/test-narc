@@ -6,8 +6,7 @@ import com.bt.buildstatscollector.service.*
 
 
 public class Execute {	
-    static def DEFAULT_CONFIG_FILE_PATH = "./build-stats-collector.config"
-    static def LOG_FILE_NAME = "./build-stats-collector.log"
+    static def LOG_FILE_NAME = "./test-narc.log"
   
     public static void main(String[] args) {
         def cli = new CliBuilder(usage: ' -p "path/to/project/root" [-v] [-t]')
@@ -39,8 +38,8 @@ public class Execute {
                     
 
                     TestNarc testNarc = new TestNarc()
-					testNarc.check(path).each {
-						println it
+					testNarc.check(path.absolutePath).each {
+						log.info it
 					}
                 }
                 else {
@@ -54,6 +53,7 @@ public class Execute {
             }
             catch (Throwable e) {
                 log.error("There was a problem running the process: ${e.message}")
+				log.debug("Stacktrace:", e)
             }
         }
     }
